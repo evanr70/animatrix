@@ -34,10 +34,12 @@ animatrix
 =========
 
 
-    Add a short description here!
+    Animate matplotlib plots in parallel.
 
 
-A longer description of your project goes here...
+Given a function that generates a matplotlib plot, animatrix will run the
+function in parallel for a list of inputs and save the resulting plots as
+a movie using ffmpeg.
 
 
 .. _pyscaffold-notes:
