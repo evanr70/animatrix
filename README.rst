@@ -42,6 +42,41 @@ function in parallel for a list of inputs and save the resulting plots as
 a movie using ffmpeg.
 
 
+=====
+Usage
+=====
+::
+
+    def plotter(array: np.ndarray, ymin: float, ymax: float) -> plt.Figure:
+        fig, axes = plt.subplots(4, sharex=True, sharey=True)
+        for axis, arr in zip(axes[:3], array):
+            axis.plot(arr)
+        axes[-1].plot(array.mean(axis=0))
+        axes[-1].set_ylim(ymin, ymax)
+        return fig
+
+    def partial_plotter(array: np.ndarray) -> plt.Figure:
+        return plotter(array, ymin=-1, ymax=1)
+
+    x = np.arange(100)
+    freqs = np.array([0.1, 0.2, 0.3])
+    scaled = x * freqs[:, None]
+    t = np.arange(300) * 0.5
+    waves = np.sin(scaled[None] + t[:, None, None])
+
+    render.render_animation(
+        func=partial_plotter,
+        array_frames=waves,
+        filename="waves.gif",
+        n_jobs=12,
+        fps=30,
+        dpi=100,
+    )
+
+.. image:: https://raw.githubusercontent.com/evanr70/animatrix/master/docs/assets/waves.gif
+    :alt: waves
+    :align: center
+
 .. _pyscaffold-notes:
 
 Note
