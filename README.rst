@@ -45,7 +45,7 @@ a movie using ffmpeg.
 =====
 Usage
 =====
-::
+.. code-block:: python
 
     def plotter(array: np.ndarray, ymin: float, ymax: float) -> plt.Figure:
         fig, axes = plt.subplots(4, sharex=True, sharey=True)
