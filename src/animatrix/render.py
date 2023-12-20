@@ -74,6 +74,7 @@ def generate_frame(
 def generate_frames(
     func: Callable[[np.ndarray], plt.Figure],
     array_frames: np.ndarray,
+    n_jobs: int,
     dpi: int = 100,
 ) -> list[BytesIO]:
     """Generate frames of an animation.
@@ -84,6 +85,8 @@ def generate_frames(
         Function that generates a figure from an array.
     array_frames : np.ndarray
         Array to generate frames from.
+    n_jobs : int
+        Number of jobs to use (processes).
     dpi : int, optional
         Dots per inch, by default 100.
 
@@ -102,7 +105,7 @@ def generate_frames(
     return pqdm(
         array=array_frames,
         function=partial_generate_frame,
-        n_jobs=12,
+        n_jobs=n_jobs,
         desc="Generating frames",
         exception_behaviour="immediate",
     ), figsize
@@ -207,6 +210,7 @@ def render_animation(
     func: Callable[[np.ndarray], plt.Figure],
     array_frames: np.ndarray,
     filename: str,
+    n_jobs: int,
     fps: int = 30,
     dpi: int = 100,
 ) -> None:
@@ -220,10 +224,23 @@ def render_animation(
         Array to generate frames from.
     filename : str
         Filename to write to.
+    n_jobs : int
+        Number of jobs to use (processes).
     fps : int, optional
         Frames per second, by default 30.
     dpi : int, optional
         Dots per inch, by default 100.
     """
-    frames, figsize = generate_frames(func, array_frames, dpi)
-    ffmpeg_write_frames(frames, filename, figsize, fps, dpi)
+    frames, figsize = generate_frames(
+        func=func,
+        array_frames=array_frames,
+        n_jobs=n_jobs,
+        dpi=dpi,
+    )
+    ffmpeg_write_frames(
+        frames=frames,
+        filename=filename,
+        figsize=figsize,
+        fps=fps,
+        dpi=dpi,
+    )
